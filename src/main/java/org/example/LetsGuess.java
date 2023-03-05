@@ -28,7 +28,7 @@ public class LetsGuess {
     public static boolean gameLogic(int level, int[] randomTable, int lives, int maxLives) { //Zbiorcza metoda funkcji gry
         int[] userTable = new int[level];
         printHowManyLives(lives, maxLives);
-        fillPlayerArrey(userTable);//podobnie jak random
+        fillPlayerArray(userTable);//podobnie jak random
         String[] showResult = checkNumbers(randomTable, userTable);
         System.out.println(Arrays.toString(showResult));//metoda ktora ladnie wyswietla
         return checkWin(showResult);
@@ -57,7 +57,11 @@ public class LetsGuess {
     public static int chooseLevel() {//Wybór ilości zgadywanych cyfr
         System.out.println("Ile cyfr chcesz zgadywać?");
         System.out.println("Wpisz 3, 4 lub 5: ");
-        int choseNumber = scanner.nextInt();//upewnij sie ze dobry zakres liczb
+        int choseNumber = scanner.nextInt();
+        while (choseNumber>5 || choseNumber<3){
+            System.out.println("Wpisałeś zły zakres cyfr");
+            choseNumber=scanner.nextInt();
+        }
         return choseNumber;
     }
 
@@ -80,8 +84,8 @@ public class LetsGuess {
         return random;
     }
 
-    public static int[] fillPlayerArrey(int[] userTable) { //Metoda do zgadywania cyfr przez gracza
-        System.out.printf("\nWpisz cyfry: ");
+    public static int[] fillPlayerArray(int[] userTable) { //Metoda do zgadywania cyfr przez gracza
+        System.out.printf("\nWpisz %d cyfr oddzielonych spacją: ",userTable.length);
         for (int i = 0; i < userTable.length; i++) {
             userTable[i] = scanner.nextInt();
         }
