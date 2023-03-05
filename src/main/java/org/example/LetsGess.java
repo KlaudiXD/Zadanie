@@ -8,25 +8,37 @@ public class LetsGess {
     public static void main(String[] args) {
         sayHi();
         int level = choseLevel();
-        //System.out.println(level);
         int[] randomTable = new int[level];
         fillArray(randomTable);
         System.out.println(Arrays.toString(randomTable));
-        boolean b= false;
+        boolean b = false;
+        int maxLives = 5;
+        int lives = maxLives;
         while (!b){
-            b= game(level, randomTable);
+            b= game(level, randomTable, lives, maxLives);
+            lives--;
+            if(lives == 0){
+                System.out.println("Przegrałeś!");
+                break;
+            }
         }
-        System.out.println("Wygrałeś!");
-
+        if(b){
+            System.out.println("Wygrałeś!");
+        }
     }
 
-    public static boolean game(int level, int[] randomTable) { //Zbiorcza metoda funkcji gry
+    public static boolean game(int level, int[] randomTable, int lives, int maxLives) { //Zbiorcza metoda funkcji gry
         int[] userTable = new int[level];
+        printHowManyLives(lives, maxLives);
         fillPlayerArrey(userTable);
         System.out.println(Arrays.toString(userTable));
         String[] showResult = checkNumber(randomTable, userTable);
         System.out.println(Arrays.toString(showResult));
-       return checkWin(level, showResult, randomTable);
+        return checkWin(level, showResult, randomTable);
+    }
+
+    public static void printHowManyLives(int lives, int maxLives){//Wyświetlenie liczby pozostałych żyć
+        System.out.printf("Masz: %d żyć z %d",lives, maxLives);
     }
 
     public static boolean checkWin(int level, String[] showResult, int[] randomTable) { //Sprawdza warunek zwycięstwa
@@ -60,7 +72,6 @@ public class LetsGess {
 
     public static int[] fillArray(int[] array) {//Uzupełnia zgadywaną tabelę losowymi cyframi
         int [] table= {0,1,2,3,4,5,6,7,8,9};
-
         for (int i = 0; i < array.length; i++) {
             int index= numberRandom();
             while (table[index]==-1){
@@ -69,7 +80,6 @@ public class LetsGess {
             array[i]=table[index];
             table[index]=-1;
         }
-  
         return array;
     }
 
@@ -106,5 +116,4 @@ public class LetsGess {
         }
         return showResult;
     }
-
 }
