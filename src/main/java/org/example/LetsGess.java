@@ -1,7 +1,6 @@
 package org.example;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class LetsGess {
     public static Scanner scanner = new Scanner(System.in);
@@ -13,74 +12,82 @@ public class LetsGess {
         int[] randomTable = new int[level];
         fillArray(randomTable);
         System.out.println(Arrays.toString(randomTable));
-        game(level, randomTable);
-        /*int[] userTable = new int[level];
-        fillPlayerArrey(userTable);
-        System.out.println(Arrays.toString(userTable));
-        String [] showResult= checkNumber(randomTable, userTable);
-        System.out.println(Arrays.toString(showResult));*/
+        boolean b= false;
+        while (!b){
+            b= game(level, randomTable);
+        }
+        System.out.println("Wygrałeś!");
 
     }
 
-    public static void game(int level, int[] randomTable) {
+    public static boolean game(int level, int[] randomTable) { //Zbiorcza metoda funkcji gry
         int[] userTable = new int[level];
         fillPlayerArrey(userTable);
         System.out.println(Arrays.toString(userTable));
         String[] showResult = checkNumber(randomTable, userTable);
         System.out.println(Arrays.toString(showResult));
-        decision(level, showResult, randomTable);
+       return checkWin(level, showResult, randomTable);
     }
 
-    public static void decision(int level, String[] showResult, int[] randomTable) {
+    public static boolean checkWin(int level, String[] showResult, int[] randomTable) { //Sprawdza warunek zwycięstwa
         int countscore = 0;
         for (int i = 0; i < showResult.length; i++) {
             if (showResult[i].equals("Cold") || showResult[i].equals("Warm")) {
-                break;
+                return false;
             } else {
                 countscore++;
             }
         }
         if(countscore == showResult.length){
-            System.out.println("Wygrałeś");
+            return true;
         }
+        return false;
     }
 
 
-    public static void sayHi() {
+    public static void sayHi() {//Rozpoczęcie gry
         System.out.println("Witaj w zgadywance liczbowej :)");
         System.out.println("Twoim zadaniem będzie odgadnięcie wylosowanych cyfr 0-9");
         System.out.println("Zaczynajmy!");
     }
 
-    public static int choseLevel() {
+    public static int choseLevel() {//Wybór ilości zgadywanych cyfr
         System.out.println("Ile cyfr chcesz zgadywać?");
         System.out.println("Wpisz 3, 4 lub 5: ");
         int choseNumber = scanner.nextInt();
         return choseNumber;
     }
 
-    public static int[] fillArray(int[] array) {
-        for (int i = 0; i < array.length - 1; i++) {
-            array[i] = numberRandom();
+    public static int[] fillArray(int[] array) {//Uzupełnia zgadywaną tabelę losowymi cyframi
+        int [] table= {0,1,2,3,4,5,6,7,8,9};
+
+        for (int i = 0; i < array.length; i++) {
+            int index= numberRandom();
+            while (table[index]==-1){
+                index=numberRandom();
+            }
+            array[i]=table[index];
+            table[index]=-1;
         }
+  
         return array;
     }
 
-    public static int numberRandom() {
+    public static int numberRandom() {//Losowanie kolejnych liczb do zgadywanej tabeli
         int random = (int) (Math.random() * 10);
         return random;
     }
 
-    public static int[] fillPlayerArrey(int[] userTable) {
+    public static int[] fillPlayerArrey(int[] userTable) { //Metoda do zgadywania cyfr przez gracza
+        System.out.printf("\nWpisz cyfry: ");
         for (int i = 0; i < userTable.length; i++) {
-            System.out.printf("\nWpisz liczbę %d z %d: ", i + 1, userTable.length);
-            userTable[i] = scanner.nextInt();
 
+            userTable[i] = scanner.nextInt();
         }
         return userTable;
     }
 
-    public static String[] checkNumber(int[] randomTable, int[] userTable) {
+    public static String[] checkNumber(int[] randomTable, int[] userTable) { //Sprawdza poprawność odgadniętych cyfr
         String[] showResult = new String[randomTable.length];
         for (int i = 0; i < userTable.length; i++) {
             int userNumber = userTable[i];
@@ -91,9 +98,9 @@ public class LetsGess {
                     int rabdomNumber = randomTable[j];
                     if (userNumber == rabdomNumber) {
                         showResult[i] = "Warm";
-                    } else {
-                        showResult[i] = "Cold";
+                        break;
                     }
+                    showResult[i]="Cold";
                 }
             }
         }
