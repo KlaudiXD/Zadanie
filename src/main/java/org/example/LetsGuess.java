@@ -7,35 +7,48 @@ public class LetsGuess {
 
     public static void main(String[] args) {
         sayHi();
+        game();
+    }
+
+    public static void game() {
         int level = chooseLevel();
         int[] randomTable = getRandomDigits(level);
         boolean isGameOver = false;
         int maxLives = 5;
         int lives = maxLives;
-        while (!isGameOver){
+        while (!isGameOver) {
             isGameOver = gameLogic(level, randomTable, lives, maxLives); // oddzielne zmienne na toczenie sie rundy oraz wygrana
             lives--;
-            if(lives == 0){
+            if (lives == 0) {
                 System.out.println("Przegrałeś!");
                 break;
             }
         }
-        if(isGameOver){
+        if (isGameOver) {
             System.out.println("Wygrałeś!");
         }
     }
 
     public static boolean gameLogic(int level, int[] randomTable, int lives, int maxLives) { //Zbiorcza metoda funkcji gry
-        int[] userTable = new int[level];
+        int[] userTable = fillPlayerArray(level);
         printHowManyLives(lives, maxLives);
-        fillPlayerArray(userTable);//podobnie jak random
         String[] showResult = checkNumbers(randomTable, userTable);
-        System.out.println(Arrays.toString(showResult));//metoda ktora ladnie wyswietla
+        printResult(showResult);
         return checkWin(showResult);
     }
 
-    public static void printHowManyLives(int lives, int maxLives){//Wyświetlenie liczby pozostałych żyć
-        System.out.printf("Masz: %d żyć z %d",lives, maxLives);
+    public static void printResult(String[] showResult) {
+
+        System.out.print("\n" + showResult[0]);
+        for (int i = 1; i < showResult.length; i++) {
+
+            System.out.print(", " + showResult[i]);
+        }
+        System.out.println();
+    }
+
+    public static void printHowManyLives(int lives, int maxLives) {//Wyświetlenie liczby pozostałych żyć
+        System.out.printf("Masz: %d żyć z %d", lives, maxLives);
     }
 
     public static boolean checkWin(String[] showResult) { //Sprawdza warunek zwycięstwa
@@ -44,7 +57,7 @@ public class LetsGuess {
                 return false;
             }
         }
-            return true;
+        return true;
     }
 
 
@@ -58,23 +71,23 @@ public class LetsGuess {
         System.out.println("Ile cyfr chcesz zgadywać?");
         System.out.println("Wpisz 3, 4 lub 5: ");
         int choseNumber = scanner.nextInt();
-        while (choseNumber>5 || choseNumber<3){
+        while (choseNumber > 5 || choseNumber < 3) {
             System.out.println("Wpisałeś zły zakres cyfr");
-            choseNumber=scanner.nextInt();
+            choseNumber = scanner.nextInt();
         }
         return choseNumber;
     }
 
     public static int[] getRandomDigits(int amount) {//Uzupełnia zgadywaną tabelę losowymi cyframi
-        int [] table= {0,1,2,3,4,5,6,7,8,9};
+        int[] table = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         int[] array = new int[amount];
         for (int i = 0; i < array.length; i++) {
-            int index= numberRandom();
-            while (table[index]==-1){
-                index=numberRandom();
+            int index = numberRandom();
+            while (table[index] == -1) {
+                index = numberRandom();
             }
-            array[i]=table[index];
-            table[index]=-1;
+            array[i] = table[index];
+            table[index] = -1;
         }
         return array;
     }
@@ -84,12 +97,13 @@ public class LetsGuess {
         return random;
     }
 
-    public static int[] fillPlayerArray(int[] userTable) { //Metoda do zgadywania cyfr przez gracza
-        System.out.printf("\nWpisz %d cyfr oddzielonych spacją: ",userTable.length);
-        for (int i = 0; i < userTable.length; i++) {
-            userTable[i] = scanner.nextInt();
+    public static int[] fillPlayerArray(int level) { //Metoda do zgadywania cyfr przez gracza
+        int[] playerArray = new int[level];
+        System.out.printf("\nWpisz %d cyfr oddzielonych spacją: ", level);
+        for (int i = 0; i < level; i++) {
+            playerArray[i] = scanner.nextInt();
         }
-        return userTable;
+        return playerArray;
     }
 
     public static String[] checkNumbers(int[] randomTable, int[] userTable) { //Sprawdza poprawność odgadniętych cyfr
