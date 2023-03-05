@@ -32,13 +32,16 @@ public class LetsGess {
     }
 
     public static void decision(int level, String[] showResult, int[] randomTable) {
-
+        int countscore = 0;
         for (int i = 0; i < showResult.length; i++) {
-            if (showResult[i] == "Cold" || showResult[i] == "Warm") {
-                game(level, randomTable);
-            } else if (showResult[i] == "Hot") {
-                return;
+            if (showResult[i].equals("Cold") || showResult[i].equals("Warm")) {
+                break;
+            } else {
+                countscore++;
             }
+        }
+        if(countscore == showResult.length){
+            System.out.println("Wygrałeś");
         }
     }
 
