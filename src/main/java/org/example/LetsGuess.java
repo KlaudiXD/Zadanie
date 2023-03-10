@@ -7,17 +7,21 @@ public class LetsGuess {
 
     public static void main(String[] args) {
         sayHi();
-        game();
+        gameLogic();
     }
 
-    public static void game() {
+    public static void gameLogic() {
         int level = chooseLevel();
         int[] randomTable = getRandomDigits(level);
         boolean isGameOver = false;
         int maxLives = 5;
         int lives = maxLives;
         while (!isGameOver) {
-            isGameOver = gameLogic(level, randomTable, lives, maxLives); // oddzielne zmienne na toczenie sie rundy oraz wygrana
+            printHowManyLives(lives, maxLives);
+            int[] userTable = fillPlayerArray(level);
+            String[] showResult = checkNumbers(randomTable, userTable);
+            printResult(showResult);
+            isGameOver = checkWin(showResult);
             lives--;
             if (lives == 0) {
                 System.out.println("Przegrałeś!");
@@ -29,19 +33,9 @@ public class LetsGuess {
         }
     }
 
-    public static boolean gameLogic(int level, int[] randomTable, int lives, int maxLives) { //Zbiorcza metoda funkcji gry
-        int[] userTable = fillPlayerArray(level);
-        printHowManyLives(lives, maxLives);
-        String[] showResult = checkNumbers(randomTable, userTable);
-        printResult(showResult);
-        return checkWin(showResult);
-    }
-
     public static void printResult(String[] showResult) {
-
         System.out.print("\n" + showResult[0]);
         for (int i = 1; i < showResult.length; i++) {
-
             System.out.print(", " + showResult[i]);
         }
         System.out.println();
@@ -93,8 +87,7 @@ public class LetsGuess {
     }
 
     public static int numberRandom() {//Losowanie kolejnych liczb do zgadywanej tabeli
-        int random = (int) (Math.random() * 10);
-        return random;
+        return (int) (Math.random() * 10);
     }
 
     public static int[] fillPlayerArray(int level) { //Metoda do zgadywania cyfr przez gracza
