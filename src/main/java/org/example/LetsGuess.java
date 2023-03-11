@@ -8,6 +8,9 @@ public class LetsGuess {
     public static void main(String[] args) {
         sayHi();
         gameLogic();
+        while (playAgain()) {
+            gameLogic();
+        }
     }
 
     public static void gameLogic() {
@@ -30,6 +33,20 @@ public class LetsGuess {
         }
         if (isGameOver) {
             System.out.println("Wygrałeś!");
+        }
+    }
+
+    private static boolean playAgain() {
+        System.out.println("Czy chcesz zagrać ponownie?");
+        String playAgain = scanner.next();
+        while (!playAgain.equalsIgnoreCase("tak") && !playAgain.equalsIgnoreCase("nie")) {
+            System.out.println("Nie rozumiem\nCzy chcesz zagrać ponownie?");
+            playAgain = scanner.next();
+        }
+        if (playAgain.equalsIgnoreCase("tak")) {
+            return true;
+        } else {
+            return false;
         }
     }
 
